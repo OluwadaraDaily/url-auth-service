@@ -1,30 +1,30 @@
 import {
   Column,
   CreateDateColumn,
+  Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-  Entity,
 } from 'typeorm';
 
-@Entity()
-export class User {
+@Entity({ name: 'activation_token' })
+export class ActivationToken {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ unique: true })
-  email: string;
+  @Column()
+  token: string;
 
-  @Column({ select: false })
-  password: string;
+  @Column()
+  userId: string;
 
   @Column({ default: false })
-  isEmailVerified: boolean;
-
-  @Column({ unique: true, nullable: true })
-  apiKey: string;
+  isUsed: boolean;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
+
+  @Column({ type: 'timestamp' })
+  expiresAt: Date;
 
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;

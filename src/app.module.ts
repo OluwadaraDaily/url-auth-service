@@ -6,6 +6,9 @@ import * as Joi from 'joi';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { User } from './users/entities/user.entity';
+import { AuthModule } from './auth/auth.module';
+import { UserAuth } from './auth/entities/user_auth.entity';
+import { ActivationToken } from './auth/entities/activation_token.entity';
 
 @Module({
   imports: [
@@ -37,14 +40,15 @@ import { User } from './users/entities/user.entity';
         username: configService.get('POSTGRES_USER'),
         password: configService.get('POSTGRES_PASSWORD'),
         database: configService.get('POSTGRES_DB'),
-        entities: [User],
+        entities: [User, UserAuth, ActivationToken],
         synchronize: configService.get('NODE_ENV') === 'development',
         logging: configService.get('NODE_ENV') === 'development',
       }),
       inject: [ConfigService],
     }),
     UsersModule,
-    TypeOrmModule.forFeature([User]),
+    AuthModule,
+    TypeOrmModule.forFeature([User, UserAuth, ActivationToken]),
   ],
   controllers: [AppController],
   providers: [AppService],
